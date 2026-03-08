@@ -1,3 +1,4 @@
 
-head_radius_mm,skull_thickness_mm,hair_thickness_mm,target_name,target_mni_x,target_mni_y,target_mni_z,search_radius_mm,grid_step_mm,coil_height_mm,preferred_orientation_deg,m2m_subj_dir,head_mesh_name,coil_file,didt_A_per_s,map_to_vol
-90,7,2,left_DLPFC,-38,30,52,20,5,4,55,/absolute/path/to/m2m_ernie,ernie.msh,Magstim_70mm_Fig8.ccd,1.0e7,True
+head_radius_mm,skull_thickness_mm,hair_thickness_mm,target_name,target_offset_lateral_mm,target_offset_anterior_mm,search_radius_mm,grid_step_mm,coil_height_mm,preferred_orientation_deg
+90,7,2,left_DLPFC,-35,25,40,5,2,55
+90,7,2,M1_hand,-30,-10,35,5,2,45
