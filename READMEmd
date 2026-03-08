@@ -1,0 +1,33 @@
+
+# TMS FEM Optimizer (SimNIBS backend)
+
+A lightweight, educational Python tool that simulates a simplified Transcranial Magnetic Stimulation (TMS) electric field (E-field) score at a target region while scanning multiple coil positions on the scalp. It produces a scalp heatmap that highlights a "hot spot" (best position) and overlays a head outline, a placement dot, an orientation arrow, and angle/distance labels. This derives the socre with **FEM-derived E-fields** from **SimNIBS**. Each candidate coil pose in the search grid triggers a SimNIBS TMS simulation; the code maps fields to NIfTI and samples **|E| (V/m)** at the target.
+
+## Requirements
+- SimNIBS ≥ 4.x installed and available to Python (run scripts with `simnibs_python` or in `simnibs_jupyter`).
+- A prepared subject directory `m2m_<subID>` (e.g., `m2m_ernie`) and a head mesh (e.g., `ernie.msh`).
+- A coil model bundled with SimNIBS (e.g., `Magstim_70mm_Fig8.ccd` or a `.nii.gz` coil model).
+- Python packages: `numpy`, `pandas`, `matplotlib`, `nibabel` (install via `pip install -r requirements.txt`).
+
+## Quick start
+1. Edit `data/sample_patient_fem.csv`:
+   - Set `m2m_subj_dir` to your **absolute** path to the subject dir (e.g., `/path/to/m2m_ernie`).
+   - Ensure `head_mesh_name` exists in that folder (e.g., `ernie.msh`).
+   - Pick a coil file present in SimNIBS (e.g., `Magstim_70mm_Fig8.ccd`).
+2. Activate SimNIBS Python environment (e.g., `simnibs_python`).
+3. Install small deps: `pip install -r requirements.txt`
+4. Run:
+   ```bash
+   python run_optimizer_fem.py --input data/sample_patient_fem.csv --outdir outputs --backend simnibs
+   ```
+5. Outputs per row:
+   - `*_heatmap.png`: FEM heatmap showing **|E| (V/m)** at the target versus coil Δx/Δy.
+   - `*_results.csv`: all candidate poses with **|E| (V/m)**.
+   - `*_report.txt`: best pose summary (Δ from target, angle, |E|, standoff, dI/dt, mesh, coil).
+
+## Notes
+- **Performance**: FEM is slower than a non-FEM analytic model. Start with a small search area (e.g., radius 20 mm, step 5 mm). Using a **`.nii.gz` coil** can speed simulations.
+- **Coordinates**: Targets are in **MNI (mm)**. The code converts MNI→subject and places the coil per SimNIBS examples.
+- **Mapping**: We enable `SESSION.map_to_vol=True` to write NIfTI volumes; sampling is done with `nibabel` in subject space.
+
+For detailed SimNIBS scripting patterns, see the official documentation and examples.
